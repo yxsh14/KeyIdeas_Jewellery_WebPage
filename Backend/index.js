@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 
 app.get("/", (req, res) => {
-    const filePath = "Uploads/Wedding Products.xlsx";
+    const filePath = "Uploads/Wedding Products1.xlsx";
 
     if (!fs.existsSync(filePath)) {
         res.status(404).json({ error: "File not found" });
