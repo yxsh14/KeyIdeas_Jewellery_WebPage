@@ -3,7 +3,7 @@ import Card from "../../Components/Card/Card.jsx";
 import Filter from "../../Components/Filter/Filter.jsx";
 import Loader from "../../Components/Loader/Loader.jsx";
 
-const baseUrl = "http://localhost:3000/";
+const baseUrl = "https://keyideas-assignment.onrender.com/";
 
 const Hero = () => {
   const [data, setData] = useState([]);
