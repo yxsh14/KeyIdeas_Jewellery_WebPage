@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-
 import Card from "../../Components/Card/Card.jsx";
 import Filter from "../../Components/Filter/Filter.jsx";
+import Loader from "../../Components/Loader/Loader.jsx";
 
-const baseUrl = "https://keyideas-assignment.onrender.com/";
+const baseUrl = "http://localhost:3000/";
 
 const Hero = () => {
   const [data, setData] = useState([]);
@@ -12,6 +12,7 @@ const Hero = () => {
   const [subCategoryFilter, setSubCategoryFilter] = useState("");
   const [sortFilter, setSortFilter] = useState("");
   const [mostPopular, setMostPopular] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -28,6 +29,8 @@ const Hero = () => {
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -109,37 +112,45 @@ const Hero = () => {
 
   return (
     <main className="flex-1 w-11/12 max-w-screen-lg mx-auto mt-20">
-      <Filter
-        filterOptions={section}
-        selectedFilter={sectionFilter}
-        onFilterUpdate={handleUpdateSectionFilter}
-        filterType="section"
-        defaultLabel="Select Category"
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <div className="flex justify-end">
+            <Filter
+              filterOptions={section}
+              selectedFilter={sectionFilter}
+              onFilterUpdate={handleUpdateSectionFilter}
+              filterType="section"
+              defaultLabel="Select Category"
+            />
 
-      <Filter
-        filterOptions={subCategories}
-        selectedFilter={subCategoryFilter}
-        onFilterUpdate={handleUpdateSubCategoryFilter}
-        filterType="subCategory"
-        defaultLabel="Select Sub-Category"
-      />
+            <Filter
+              filterOptions={subCategories}
+              selectedFilter={subCategoryFilter}
+              onFilterUpdate={handleUpdateSubCategoryFilter}
+              filterType="subCategory"
+              defaultLabel="Select Sub-Category"
+            />
 
-      <Filter
-        filterOptions={sortFilters}
-        selectedFilter={sortFilter}
-        onFilterUpdate={handleUpdateSortFilter}
-        filterType="sort"
-        defaultLabel="Sort By"
-      />
+            <Filter
+              filterOptions={sortFilters}
+              selectedFilter={sortFilter}
+              onFilterUpdate={handleUpdateSortFilter}
+              filterType="sort"
+              defaultLabel="Sort By"
+            />
+          </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {cardData
-          .slice(0, Math.min(currentPage * itemsPerPage, cardData.length))
-          .map((card) => (
-            <Card key={card.prod_sku} card={card} />
-          ))}
-      </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {cardData
+              .slice(0, Math.min(currentPage * itemsPerPage, cardData.length))
+              .map((card) => (
+                <Card key={card.prod_sku} card={card} />
+              ))}
+          </div>
+        </>
+      )}
     </main>
   );
 };
